@@ -12,6 +12,7 @@ namespace DefaultNamespace
         private GameObject cellInstance;
         
         public bool IsBomb { get => isBomb; set => isBomb = value; }
+        public bool IsFlagged { get => isFlagged; }
         public int XCoord { get => xCoord; }
         public int YCoord { get => yCoord; }
         public GameObject CellInstance { get => cellInstance; set => cellInstance = value; }
@@ -32,7 +33,7 @@ namespace DefaultNamespace
             return OpenCellResult.Opened;
         }
 
-        public SetBombFlagResult SetbombFlag()
+        public SetBombFlagResult SetBombFlag()
         {
             if (isOpened) return SetBombFlagResult.None;
 

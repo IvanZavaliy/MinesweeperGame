@@ -10,10 +10,13 @@ public class Minefield : MonoBehaviour
     [SerializeField] int width;
     [SerializeField] int height;
     [SerializeField] MinefieldVisualizer visualizer;
+    [SerializeField] PlayerInput playerInput;
 
     [UnityEngine.Range(15, 50)]
     [SerializeField] private int bombPercentage;
 
+    [SerializeField] private GameObject winMenuPopUp;
+    [SerializeField] private GameObject loseMenuPopUp;
     private List<Cell> cells = new List<Cell>();
     Dictionary<Vector2Int, Cell> positionToCell = new Dictionary<Vector2Int, Cell>();
     
@@ -29,6 +32,7 @@ public class Minefield : MonoBehaviour
 
     private void Awake()
     {
+        Screen.SetResolution(1080, 720, false);
         totalCells = width * height;
         bombsToSetup = totalCells * bombPercentage / 100;
         remainedBomds = bombsToSetup;
@@ -44,7 +48,7 @@ public class Minefield : MonoBehaviour
     {
         CreateMinefield();
         visualizer.VisualizeCellsOnStart(cells);
-        OpenRandomEmptyCell();
+        //OpenRandomEmptyCell();
     }
     
     private void OpenRandomEmptyCell()
@@ -96,7 +100,7 @@ public class Minefield : MonoBehaviour
     public void SetBombFlag(Vector2Int cellCoords)
     {
         Cell cell = positionToCell[cellCoords];
-        SetBombFlagResult result = cell.SetbombFlag();
+        SetBombFlagResult result = cell.SetBombFlag();
 
         if (result == SetBombFlagResult.Setted)
         {
@@ -109,6 +113,8 @@ public class Minefield : MonoBehaviour
                 if (remainedBomds == 0 && settedFlags == bombsToSetup)
                 {
                     print("You win"); // Заглушка
+                    playerInput.isActive = false;
+                    winMenuPopUp.SetActive(true);
                 }
             }
         }
@@ -141,10 +147,22 @@ public class Minefield : MonoBehaviour
                 }
             }
         }
+
         if (result == OpenCellResult.GameOver)
+        {
             print("You lose"); // Заглушка
+            visualizer.BombVisualize(cells);
+            playerInput.isActive = false;
+            loseMenuPopUp.SetActive(true);
+        }
+
         if (closedCells == bombsToSetup)
+        {
             print("You win"); // Заглушка
+            visualizer.SetFlagsOnWin(cells);
+            playerInput.isActive = false;
+            winMenuPopUp.SetActive(true);
+        }
     }
     
     private int GetBombsAroundCell(Cell cell)

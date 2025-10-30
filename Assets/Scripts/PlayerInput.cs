@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
 {
-    [SerializeField] Minefield minefield;
-    bool isActive = true;
+    [SerializeField] private Minefield minefield;
+    public bool isActive = true;
 
     private void Update()
     {

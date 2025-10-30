@@ -9,6 +9,7 @@ public class MinefieldVisualizer : MonoBehaviour
     [SerializeField] private DigitSprites[]  digitSprites;
     [SerializeField] private Sprite flagSprite;
     [SerializeField] private Sprite closedSprite;
+    [SerializeField] private Sprite bombSprite;
 
     public void VisualizeCellsOnStart(List<Cell> cells)
     {
@@ -41,6 +42,25 @@ public class MinefieldVisualizer : MonoBehaviour
             cell.CellInstance.GetComponent<SpriteRenderer>().sprite = flagSprite;
         else
             cell.CellInstance.GetComponent<SpriteRenderer>().sprite = closedSprite;
+    }
+
+    public void BombVisualize(List<Cell> cells)
+    {
+        EndGameSpriteVisualizer(cells, bombSprite);
+    }
+
+    public void SetFlagsOnWin(List<Cell> cells)
+    {
+        EndGameSpriteVisualizer(cells, flagSprite);
+    }
+
+    public void EndGameSpriteVisualizer(List<Cell> cells, Sprite sprite)
+    {
+        foreach (var cell in cells)
+        {
+            if (cell.IsBomb && !cell.IsFlagged)
+                cell.CellInstance.GetComponent<SpriteRenderer>().sprite = sprite;
+        }
     }
 }
 
