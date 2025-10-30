@@ -21,5 +21,29 @@ namespace DefaultNamespace
             this.xCoord = xCoord;
             this.yCoord = yCoord;
         }
+        
+        public OpenCellResult OpenCell()
+        {
+            if (isOpened || isFlagged) return OpenCellResult.None;
+
+            if (isBomb) return OpenCellResult.GameOver;
+            
+            isOpened = true;
+            return OpenCellResult.Opened;
+        }
+
+        public SetBombFlagResult SetbombFlag()
+        {
+            if (isOpened) return SetBombFlagResult.None;
+
+            if (isFlagged)
+            {
+                isFlagged = false;
+                return SetBombFlagResult.Unsetted;
+            }
+            
+            isFlagged = true;
+            return SetBombFlagResult.Setted;
+        }
     }
 }
