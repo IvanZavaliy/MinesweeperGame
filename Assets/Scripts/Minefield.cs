@@ -20,6 +20,7 @@ public class Minefield : MonoBehaviour
     private List<Cell> cells = new List<Cell>();
     Dictionary<Vector2Int, Cell> positionToCell = new Dictionary<Vector2Int, Cell>();
     
+    private bool isGameStarted = false;
     private int totalCells; // Загальна кількість клітинок
     private int bombsToSetup; // Кількість замінованих клітинок
     private int remainedBomds; // Кількість закритих замінованих клітинок
@@ -81,19 +82,24 @@ public class Minefield : MonoBehaviour
                 positionToCell[new Vector2Int(i, j)] = cell;
             }
         }
-
-        SetBombs();
     }
 
-    private void SetBombs()
+    private void SetBombs(Cell cell)
     {
         int setBombs = 0;
         while (setBombs < bombsToSetup)
         {
             int randomIndex = Random.Range(0, cells.Count);
             if (cells[randomIndex].IsBomb) continue;
-            cells[randomIndex].IsBomb = true;
-            setBombs++;
+
+            bool isInSafeArea = Math.Abs(cells[randomIndex].XCoord - cell.XCoord) <= 1 &&
+                                Math.Abs(cells[randomIndex].YCoord - cell.YCoord) <= 1;
+
+            if (!isInSafeArea)
+            {
+                cells[randomIndex].IsBomb = true;
+                setBombs++;
+            }
         }
     }
 
@@ -132,6 +138,13 @@ public class Minefield : MonoBehaviour
     public void OpenCellByCoords(Vector2Int cellCoords)
     {
         Cell cell = positionToCell[cellCoords];
+        
+        if (!isGameStarted)
+        {
+            isGameStarted = true;
+            SetBombs(cell);
+        }
+        
         OpenCellResult result = cell.OpenCell();
         if (result == OpenCellResult.Opened)
         {
