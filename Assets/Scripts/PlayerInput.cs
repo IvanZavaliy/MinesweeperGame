@@ -4,13 +4,14 @@ using UnityEngine;
 public class PlayerInput : MonoBehaviour
 {
     [SerializeField] private Minefield minefield;
+    [SerializeField] private Player player;
     public bool isActive = true;
 
     private void Update()
     {
         if (!isActive) return;
 
-        if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1))
         {
             InteractWithCell();
         }
@@ -21,11 +22,14 @@ public class PlayerInput : MonoBehaviour
         RaycastHit2D hit = Utils.GetRaycastHit2DFromMousePosition();
         if (!hit) return;
         
-        Vector2Int cellCoords = new Vector2Int((int)hit.transform.position.x, (int)hit.transform.position.y);
+        Vector2Int coords = new Vector2Int((int)hit.transform.position.x, (int)hit.transform.position.y);
 
-        if (Input.GetMouseButtonDown(0))
-            minefield.OpenCellByCoords(cellCoords);
-        else
-            minefield.SetBombFlag(cellCoords);
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (!minefield.GameStarted) minefield.GetCoordsForPlayer(coords);
+            minefield.OpenCellByCoords(coords);
+        }
+        else if  (Input.GetMouseButtonUp(1) && minefield.GameStarted)
+            minefield.SetBombFlag(coords);
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class MinefieldVisualizer : MonoBehaviour
 {
     [SerializeField] private GameObject closedCell;
+    [SerializeField] private GameObject Player;
     [SerializeField] private Transform cellContainer;
     [SerializeField] private DigitSprites[]  digitSprites;
     [SerializeField] private Sprite flagSprite;
@@ -61,6 +62,11 @@ public class MinefieldVisualizer : MonoBehaviour
             if (cell.IsBomb && !cell.IsFlagged)
                 cell.CellInstance.GetComponent<SpriteRenderer>().sprite = sprite;
         }
+    }
+
+    public void SpawnPlayer(int xCoord, int yCoord)
+    {
+        Instantiate(Player, new Vector2(xCoord, yCoord), Quaternion.identity);
     }
 }
 

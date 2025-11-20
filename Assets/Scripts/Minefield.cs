@@ -30,6 +30,7 @@ public class Minefield : MonoBehaviour
     
     public int Width { get => width; }
     public int Height { get => height; }
+    public bool GameStarted { get => isGameStarted; }
 
     private void Awake()
     {
@@ -49,26 +50,6 @@ public class Minefield : MonoBehaviour
     {
         CreateMinefield();
         visualizer.VisualizeCellsOnStart(cells);
-        //OpenRandomEmptyCell();
-    }
-    
-    private void OpenRandomEmptyCell()
-    {
-        bool isOpened = false;
-        List<Cell> cellsToChooseFrom = new List<Cell>(cells);
-
-        while (!isOpened && cellsToChooseFrom.Count > 0)
-        {
-            int randomIndex = Random.Range(0, cellsToChooseFrom.Count);
-            Cell cell = cellsToChooseFrom[randomIndex];
-            if (cell.IsBomb || GetBombsAroundCell(cell) != 0)
-            {
-                cellsToChooseFrom.Remove(cell);
-                continue;
-            }
-            OpenCellByCoords(new Vector2Int(cell.XCoord, cell.YCoord));
-            isOpened = true;
-        }
     }
 
     private void CreateMinefield()
@@ -206,5 +187,11 @@ public class Minefield : MonoBehaviour
         }
         
         return neighbourCells;
+    }
+
+    public void GetCoordsForPlayer(Vector2Int coords)
+    {
+        Cell cellSpawnPoint = positionToCell[coords];
+        visualizer.SpawnPlayer(cellSpawnPoint.XCoord, cellSpawnPoint.YCoord);
     }
 }

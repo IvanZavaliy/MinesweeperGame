@@ -614,7 +614,7 @@ GameObject:
   - component: {fileID: 855879319}
   - component: {fileID: 855879320}
   m_Layer: 0
-  m_Name: Player
+  m_Name: PlayerInput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -648,6 +648,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInput
   minefield: {fileID: 254173066}
+  player: {fileID: 0}
   isActive: 1
 --- !u!1 &1146025330
 GameObject:
@@ -1687,6 +1688,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MinefieldVisualizer
   closedCell: {fileID: 8476732881417539379, guid: f7fddfe0e5dffbc43909f2eb4170d6bf, type: 3}
+  Player: {fileID: 6440894478903395974, guid: 59d63ddffa7e2734ab3e90d6c1320c79, type: 3}
   cellContainer: {fileID: 692426291}
   digitSprites:
   - numberOfBombs: 0
