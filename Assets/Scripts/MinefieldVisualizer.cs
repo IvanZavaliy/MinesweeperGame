@@ -66,7 +66,8 @@ public class MinefieldVisualizer : MonoBehaviour
 
     public void SpawnPlayer(int xCoord, int yCoord)
     {
-        Instantiate(Player, new Vector2(xCoord, yCoord), Quaternion.identity);
+        Player.SetActive(true);
+        Player.transform.position = new Vector2(xCoord, yCoord);
     }
 }
 

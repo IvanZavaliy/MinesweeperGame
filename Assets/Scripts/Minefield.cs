@@ -18,7 +18,8 @@ public class Minefield : MonoBehaviour
     [SerializeField] private GameObject winMenuPopUp;
     [SerializeField] private GameObject loseMenuPopUp;
     private List<Cell> cells = new List<Cell>();
-    Dictionary<Vector2Int, Cell> positionToCell = new Dictionary<Vector2Int, Cell>();
+    private Dictionary<Vector2Int, Cell> positionToCell = new Dictionary<Vector2Int, Cell>();
+    private List<Vector2Int> minefieldBordersCoords = new List<Vector2Int>();
     
     private bool isGameStarted = false;
     private int totalCells; // Загальна кількість клітинок
@@ -28,13 +29,13 @@ public class Minefield : MonoBehaviour
     private int settedFlags = 0; // Кількість встановлених прапорців
     private int closedCells; // Кількість закритих клітинок
     
-    public int Width { get => width; }
-    public int Height { get => height; }
-    public bool GameStarted { get => isGameStarted; }
+    public int Width => width;
+    public int Height => height;
+    public bool GameStarted => isGameStarted;
+    public List<Vector2Int> MinefieldBordersCoords => minefieldBordersCoords;
 
     private void Awake()
     {
-        Screen.SetResolution(1080, 720, false);
         totalCells = width * height;
         bombsToSetup = totalCells * bombPercentage / 100;
         remainedBomds = bombsToSetup;
@@ -44,6 +45,9 @@ public class Minefield : MonoBehaviour
     private void Start()
     {
         StartGame();
+        
+        minefieldBordersCoords.Add(new Vector2Int(cells[0].XCoord, cells[0].YCoord));
+        minefieldBordersCoords.Add(new Vector2Int(cells[^1].XCoord, cells[^1].YCoord));
     }
 
     public void StartGame()

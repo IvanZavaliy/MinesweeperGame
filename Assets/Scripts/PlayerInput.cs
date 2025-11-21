@@ -1,10 +1,10 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerInput : MonoBehaviour
 {
     [SerializeField] private Minefield minefield;
-    [SerializeField] private Player player;
     public bool isActive = true;
     
     public static event Action OnMoveUp;
