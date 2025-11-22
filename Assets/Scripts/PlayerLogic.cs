@@ -62,8 +62,17 @@ public class PlayerLogic : MonoBehaviour
             yield return null;
         }
         
+        PlayerRaycast();
         transform.position = endPos; 
         isMoving = false;
+    }
+
+    private void PlayerRaycast()
+    {
+        RaycastHit2D hit = Utils.GetRaycastHit2DFromWorldObjectPosition(transform.position);
+        Vector2Int coords = new Vector2Int((int)hit.transform.position.x, (int)hit.transform.position.y);
+        
+        minefield.CellCollisionCheck(coords);
     }
 
     private PlayerPositionCheck IsPlayerInMinefield()

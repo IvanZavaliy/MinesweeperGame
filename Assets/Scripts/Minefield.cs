@@ -98,16 +98,7 @@ public class Minefield : MonoBehaviour
             settedFlags++;
             visualizer.SetBombFlag(cell, result);
             
-            if (cell.IsBomb)
-            {
-                remainedBomds--;
-                if (remainedBomds == 0 && settedFlags == bombsToSetup)
-                {
-                    print("You win"); // Заглушка
-                    playerInput.isActive = false;
-                    winMenuPopUp.SetActive(true);
-                }
-            }
+            if (cell.IsBomb) remainedBomds--;
         }
 
         if (result == SetBombFlagResult.Unsetted)
@@ -117,6 +108,19 @@ public class Minefield : MonoBehaviour
             
             if (cell.IsBomb)
                 remainedBomds++;
+        }
+    }
+    
+    public void CellCollisionCheck(Vector2Int playerCoords)
+    {
+        Cell cell = positionToCell[playerCoords];
+        CellStatusResult statusResult = cell.CellStatus();
+
+        if (statusResult == CellStatusResult.Opened) return;
+
+        if (cell.IsBomb)
+        {
+            LoseLogic();
         }
     }
     
@@ -130,9 +134,10 @@ public class Minefield : MonoBehaviour
             SetBombs(cell);
         }
         
-        OpenCellResult result = cell.OpenCell();
-        if (result == OpenCellResult.Opened)
+        CellStatusResult statusResult = cell.CellStatus();
+        if (statusResult == CellStatusResult.Closed)
         {
+            cell.IsOpened = true;
             int bombsAround = GetBombsAroundCell(cell);
             visualizer.OpenCell(cell, bombsAround);
             closedCells--;
@@ -146,20 +151,14 @@ public class Minefield : MonoBehaviour
             }
         }
 
-        if (result == OpenCellResult.GameOver)
+        if (statusResult == CellStatusResult.GameOver)
         {
-            print("You lose"); // Заглушка
-            visualizer.BombVisualize(cells);
-            playerInput.isActive = false;
-            loseMenuPopUp.SetActive(true);
+            LoseLogic();
         }
 
         if (closedCells == bombsToSetup)
         {
-            print("You win"); // Заглушка
-            visualizer.SetFlagsOnWin(cells);
-            playerInput.isActive = false;
-            winMenuPopUp.SetActive(true);
+            WinLogic();
         }
     }
     
@@ -191,6 +190,22 @@ public class Minefield : MonoBehaviour
         }
         
         return neighbourCells;
+    }
+
+    private void WinLogic()
+    {
+        print("You win"); // Заглушка
+        visualizer.SetFlagsOnWin(cells);
+        playerInput.isActive = false;
+        winMenuPopUp.SetActive(true);
+    }
+
+    private void LoseLogic()
+    {
+        print("You lose"); // Заглушка
+        visualizer.BombVisualize(cells);
+        playerInput.isActive = false;
+        loseMenuPopUp.SetActive(true);
     }
 
     public void GetCoordsForPlayer(Vector2Int coords)

@@ -1,8 +1,9 @@
 
-public enum OpenCellResult
+public enum CellStatusResult
 {
     GameOver,
     Opened,
+    Closed,
     None
 }
 

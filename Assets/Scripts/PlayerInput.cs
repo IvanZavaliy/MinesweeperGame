@@ -16,11 +16,13 @@ public class PlayerInput : MonoBehaviour
     {
         if (!isActive) return;
 
+        // Player spawn and dig starting zone
         if (Input.GetMouseButtonUp(0) && !minefield.GameStarted)
         {
             DigUpStartingCell();
         }
         
+        // PLayer movement
         if (Input.GetKeyDown(KeyCode.W))
         {
             OnMoveUp?.Invoke();
@@ -37,16 +39,17 @@ public class PlayerInput : MonoBehaviour
         {
             OnMoveLeft?.Invoke();
         }
+        
+        // Player interaction
     }
 
     private void DigUpStartingCell()
     {
         RaycastHit2D hit = Utils.GetRaycastHit2DFromMousePosition();
         if (!hit) return;
-        
         Vector2Int coords = new Vector2Int((int)hit.transform.position.x, (int)hit.transform.position.y); 
         
-        minefield.GetCoordsForPlayer(coords);
         minefield.OpenCellByCoords(coords);
+        minefield.GetCoordsForPlayer(coords);
     }
 }

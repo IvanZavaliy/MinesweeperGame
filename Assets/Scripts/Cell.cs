@@ -12,6 +12,7 @@ namespace DefaultNamespace
         private GameObject cellInstance;
         
         public bool IsBomb { get => isBomb; set => isBomb = value; }
+        public bool IsOpened { set => isOpened = value; }
         public bool IsFlagged { get => isFlagged; }
         public int XCoord { get => xCoord; }
         public int YCoord { get => yCoord; }
@@ -23,14 +24,15 @@ namespace DefaultNamespace
             this.yCoord = yCoord;
         }
         
-        public OpenCellResult OpenCell()
+        public CellStatusResult CellStatus()
         {
-            if (isOpened || isFlagged) return OpenCellResult.None;
+            if (isOpened || isFlagged) return CellStatusResult.None;
 
-            if (isBomb) return OpenCellResult.GameOver;
+            if (isBomb) return CellStatusResult.GameOver;
             
-            isOpened = true;
-            return OpenCellResult.Opened;
+            if (!isOpened) return CellStatusResult.Closed;
+            
+            return CellStatusResult.Opened;
         }
 
         public SetBombFlagResult SetBombFlag()
