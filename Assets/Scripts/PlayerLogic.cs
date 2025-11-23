@@ -7,42 +7,56 @@ public class PlayerLogic : MonoBehaviour
 {
     [SerializeField] Minefield minefield;
     
-    public float stepDistance = 1f;
-    public float moveDuration = 0.25f;
+    [SerializeField] private float stepDistance = 1f;
+    [SerializeField] private float moveDuration = 0.1f;
     private bool isMoving = false;
+    
+    private Dictionary<KeyCode, Vector2Int> handleDirections;
 
-    void OnEnable()
+    private void Awake()
     {
-        PlayerInput.OnMoveUp += HandleMoveUp;
-        PlayerInput.OnMoveDown += HandleMoveDown;
-        PlayerInput.OnMoveRight += HandleMoveRight;
-        PlayerInput.OnMoveLeft += HandleMoveLeft;
+        handleDirections = new Dictionary<KeyCode, Vector2Int>
+        {
+            { KeyCode.RightArrow, new Vector2Int(1, 0) },
+            { KeyCode.LeftArrow, new Vector2Int(-1, 0) },
+            { KeyCode.DownArrow, new Vector2Int(0, -1) },
+            { KeyCode.UpArrow, new Vector2Int(0, 1) }
+        };
     }
 
-    void OnDisable()
+    private void OnEnable()
     {
-        PlayerInput.OnMoveUp -= HandleMoveUp;
-        PlayerInput.OnMoveDown -= HandleMoveDown;
-        PlayerInput.OnMoveRight -= HandleMoveRight;
-        PlayerInput.OnMoveLeft -= HandleMoveLeft;
+        PlayerInput.OnMoveUp += PlayerMoveUp;
+        PlayerInput.OnMoveDown += PlayerMoveDown;
+        PlayerInput.OnMoveRight += PlayerMoveRight;
+        PlayerInput.OnMoveLeft += PlayerMoveLeft;
+        PlayerInput.OnDigUpCell += DigUpCell;
     }
 
-    void HandleMoveUp()
+    private void OnDisable()
+    {
+        PlayerInput.OnMoveUp -= PlayerMoveUp;
+        PlayerInput.OnMoveDown -= PlayerMoveDown;
+        PlayerInput.OnMoveRight -= PlayerMoveRight;
+        PlayerInput.OnMoveLeft -= PlayerMoveLeft;
+    }
+
+    private void PlayerMoveUp()
     {
         if (!isMoving && IsPlayerInMinefield().IsUp())
             StartCoroutine(MoveStep(Vector3.up * stepDistance));
     }
-    void HandleMoveDown()
+    private void PlayerMoveDown()
     {
         if (!isMoving && IsPlayerInMinefield().IsDown())
             StartCoroutine(MoveStep(Vector3.down * stepDistance));
     }
-    void HandleMoveRight()
+    private void PlayerMoveRight()
     {
         if (!isMoving && IsPlayerInMinefield().IsRight())
             StartCoroutine(MoveStep(Vector3.right * stepDistance));
     }
-    void HandleMoveLeft()
+    private void PlayerMoveLeft()
     {
         if (!isMoving && IsPlayerInMinefield().IsLeft())
             StartCoroutine(MoveStep(Vector3.left * stepDistance));
@@ -73,6 +87,17 @@ public class PlayerLogic : MonoBehaviour
         Vector2Int coords = new Vector2Int((int)hit.transform.position.x, (int)hit.transform.position.y);
         
         minefield.CellCollisionCheck(coords);
+    }
+    
+    private void DigUpCell(KeyCode currentHandleActiveKey)
+    {
+        int xHandleCoord = handleDirections[currentHandleActiveKey].x;
+        int yHandleCoord = handleDirections[currentHandleActiveKey].y;
+        
+        RaycastHit2D hit = Utils.GetRaycastHit2DFromWorldObjectPosition(transform.position);
+        Vector2Int coords = new Vector2Int((int)hit.transform.position.x + xHandleCoord, (int)hit.transform.position.y + yHandleCoord);
+        
+        minefield.OpenCellByCoords(coords);
     }
 
     private PlayerPositionCheck IsPlayerInMinefield()
