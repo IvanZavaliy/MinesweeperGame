@@ -548,13 +548,14 @@ GameObject:
   - component: {fileID: 546920805}
   - component: {fileID: 546920804}
   - component: {fileID: 546920802}
+  - component: {fileID: 546920806}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &546920802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -644,6 +645,22 @@ Transform:
   - {fileID: 1619942865}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &546920806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 546920801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a85b227075be2642934d046da839417, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerVisualizer
+  rightPlayerHandle: {fileID: 1052690533}
+  leftPlayerHandle: {fileID: 26654292}
+  upPlayerHandle: {fileID: 1489587263}
+  downPlayerHandle: {fileID: 235539614}
 --- !u!1 &691205381
 GameObject:
   m_ObjectHideFlags: 0
@@ -935,7 +952,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInput
   minefield: {fileID: 254173066}
-  visualizer: {fileID: 0}
+  playerVisualizer: {fileID: 546920806}
   isActive: 1
 --- !u!1 &1052690533
 GameObject:

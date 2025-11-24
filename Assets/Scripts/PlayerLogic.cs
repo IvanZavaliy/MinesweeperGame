@@ -11,18 +11,13 @@ public class PlayerLogic : MonoBehaviour
     [SerializeField] private float moveDuration = 0.1f;
     private bool isMoving = false;
     
-    private Dictionary<KeyCode, Vector2Int> handleDirections;
-
-    private void Awake()
+    private Dictionary<KeyCode, Vector2Int> handleDirections = new Dictionary<KeyCode, Vector2Int>
     {
-        handleDirections = new Dictionary<KeyCode, Vector2Int>
-        {
-            { KeyCode.RightArrow, new Vector2Int(1, 0) },
-            { KeyCode.LeftArrow, new Vector2Int(-1, 0) },
-            { KeyCode.DownArrow, new Vector2Int(0, -1) },
-            { KeyCode.UpArrow, new Vector2Int(0, 1) }
-        };
-    }
+        { KeyCode.RightArrow, new Vector2Int(1, 0) },
+        { KeyCode.LeftArrow, new Vector2Int(-1, 0) },
+        { KeyCode.DownArrow, new Vector2Int(0, -1) },
+        { KeyCode.UpArrow, new Vector2Int(0, 1) }
+    };
 
     private void OnEnable()
     {
@@ -39,6 +34,7 @@ public class PlayerLogic : MonoBehaviour
         PlayerInput.OnMoveDown -= PlayerMoveDown;
         PlayerInput.OnMoveRight -= PlayerMoveRight;
         PlayerInput.OnMoveLeft -= PlayerMoveLeft;
+        PlayerInput.OnDigUpCell -= DigUpCell;
     }
 
     private void PlayerMoveUp()
