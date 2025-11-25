@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -7,9 +8,14 @@ public class PlayerInput : MonoBehaviour
 {
     [SerializeField] private Minefield minefield;
     [SerializeField] private PlayerVisualizer playerVisualizer;
+    [SerializeField] private PlayerLogic playerLogic;
     public bool isActive = true;
 
-    private Dictionary<KeyCode, Action<bool>> handleActions;
+    private KeyCode[] handlesInputKeys =
+    {
+        KeyCode.RightArrow, KeyCode.LeftArrow,
+        KeyCode.UpArrow, KeyCode.DownArrow,
+    };
     private KeyCode currentHandleActiveKey = KeyCode.None;
     
     public static event Action OnMoveUp;
@@ -17,17 +23,7 @@ public class PlayerInput : MonoBehaviour
     public static event Action OnMoveRight;
     public static event Action OnMoveLeft;
     public static event Action<KeyCode> OnDigUpCell;
-
-    private void Awake()
-    {
-        handleActions = new Dictionary<KeyCode, Action<bool>>
-        {
-            { KeyCode.RightArrow, playerVisualizer.SetActiveRightPlayerHandle },
-            { KeyCode.LeftArrow, playerVisualizer.SetActiveLeftPlayerHandle },
-            { KeyCode.DownArrow, playerVisualizer.SetActiveDownPlayerHandle },
-            { KeyCode.UpArrow, playerVisualizer.SetActiveUpPlayerHandle }
-        };
-    }
+    public static event Action<KeyCode> OnFlaggedCell;
 
     private void Update()
     {
@@ -80,25 +76,33 @@ public class PlayerInput : MonoBehaviour
     {
         if (currentHandleActiveKey == KeyCode.None)
         {
-            foreach (var key in handleActions.Keys)
+            foreach (var key in handlesInputKeys)
             {
                 if (Input.GetKeyDown(key))
                 {
                     currentHandleActiveKey = key;
-                    handleActions[key].Invoke(true);
+                    playerVisualizer.SetActivePlayerHandle(true,  currentHandleActiveKey);
                     break;
                 }
             }
         }
         else
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E) && 
+                playerLogic.HandleInMinefieldCheck[currentHandleActiveKey].Invoke(currentHandleActiveKey))
             {
                 print("dig");
                 SetInactiveHandle();
                 OnDigUpCell?.Invoke(currentHandleActiveKey);
             }
-            else if (Input.GetKeyUp(currentHandleActiveKey))
+            if (Input.GetKeyDown(KeyCode.F) &&
+                playerLogic.HandleInMinefieldCheck[currentHandleActiveKey].Invoke(currentHandleActiveKey))
+            {
+                print("flag setted");
+                SetInactiveHandle();
+                OnFlaggedCell?.Invoke(currentHandleActiveKey);
+            }
+            if (Input.GetKeyUp(currentHandleActiveKey))
             {
                 SetInactiveHandle();
                 currentHandleActiveKey = KeyCode.None;
@@ -107,9 +111,9 @@ public class PlayerInput : MonoBehaviour
 
         void SetInactiveHandle()
         {
-            if (handleActions.ContainsKey(currentHandleActiveKey))
+            if (handlesInputKeys.Contains(currentHandleActiveKey))
             {
-                handleActions[currentHandleActiveKey].Invoke(false);
+                playerVisualizer.SetActivePlayerHandle(false, currentHandleActiveKey);
             }
         }
     }

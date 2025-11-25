@@ -18,6 +18,20 @@ public class PlayerLogic : MonoBehaviour
         { KeyCode.DownArrow, new Vector2Int(0, -1) },
         { KeyCode.UpArrow, new Vector2Int(0, 1) }
     };
+    private Dictionary<KeyCode, Func<KeyCode, bool>> handleInMinefieldCheck;
+    
+    public Dictionary<KeyCode, Func<KeyCode, bool>> HandleInMinefieldCheck => handleInMinefieldCheck;
+
+    private void Awake()
+    {
+        handleInMinefieldCheck = new Dictionary<KeyCode, Func<KeyCode, bool>>
+        {
+            { KeyCode.RightArrow, keyCode => IsPlayerInMinefield(keyCode).IsRight() },
+            { KeyCode.LeftArrow, keyCode => IsPlayerInMinefield(keyCode).IsLeft() },
+            { KeyCode.DownArrow, keyCode => IsPlayerInMinefield(keyCode).IsDown() },
+            { KeyCode.UpArrow, keyCode => IsPlayerInMinefield(keyCode).IsDown() }
+        };
+    }
 
     private void OnEnable()
     {
@@ -26,6 +40,7 @@ public class PlayerLogic : MonoBehaviour
         PlayerInput.OnMoveRight += PlayerMoveRight;
         PlayerInput.OnMoveLeft += PlayerMoveLeft;
         PlayerInput.OnDigUpCell += DigUpCell;
+        PlayerInput.OnFlaggedCell += SetBombFlagOnCell;
     }
 
     private void OnDisable()
@@ -35,6 +50,7 @@ public class PlayerLogic : MonoBehaviour
         PlayerInput.OnMoveRight -= PlayerMoveRight;
         PlayerInput.OnMoveLeft -= PlayerMoveLeft;
         PlayerInput.OnDigUpCell -= DigUpCell;
+        PlayerInput.OnFlaggedCell -= SetBombFlagOnCell;
     }
 
     private void PlayerMoveUp()
@@ -79,26 +95,41 @@ public class PlayerLogic : MonoBehaviour
 
     private void PlayerRaycast()
     {
-        RaycastHit2D hit = Utils.GetRaycastHit2DFromWorldObjectPosition(transform.position);
-        Vector2Int coords = new Vector2Int((int)hit.transform.position.x, (int)hit.transform.position.y);
-        
+        Vector2Int coords = GetCoordsOfInteractedCell();
         minefield.CellCollisionCheck(coords);
     }
     
     private void DigUpCell(KeyCode currentHandleActiveKey)
     {
-        int xHandleCoord = handleDirections[currentHandleActiveKey].x;
-        int yHandleCoord = handleDirections[currentHandleActiveKey].y;
-        
-        RaycastHit2D hit = Utils.GetRaycastHit2DFromWorldObjectPosition(transform.position);
-        Vector2Int coords = new Vector2Int((int)hit.transform.position.x + xHandleCoord, (int)hit.transform.position.y + yHandleCoord);
-        
+        Vector2Int coords = GetCoordsOfInteractedCell(currentHandleActiveKey);
         minefield.OpenCellByCoords(coords);
     }
-
-    private PlayerPositionCheck IsPlayerInMinefield()
+    
+    private void SetBombFlagOnCell(KeyCode currentHandleActiveKey)
     {
-        return new PlayerPositionCheck(minefield, transform.position);
+        Vector2Int coords = GetCoordsOfInteractedCell(currentHandleActiveKey);
+        minefield.SetBombFlag(coords);
+    }
+
+    private Vector2Int GetCoordsOfInteractedCell(KeyCode currentHandleActiveKey = KeyCode.None)
+    {
+        int xCoord = 0, yCoord = 0;
+
+        if (currentHandleActiveKey != KeyCode.None)
+        {
+            xCoord = handleDirections[currentHandleActiveKey].x;
+            yCoord = handleDirections[currentHandleActiveKey].y;
+        }
+        
+        RaycastHit2D hit = Utils.GetRaycastHit2DFromWorldObjectPosition(transform.position);
+        Vector2Int coords = new Vector2Int((int)hit.transform.position.x + xCoord, (int)hit.transform.position.y + yCoord);
+        
+        return coords;
+    }
+    
+    private PlayerPositionCheck IsPlayerInMinefield(KeyCode currentHandleActiveKey = KeyCode.None)
+    {
+        return new PlayerPositionCheck(minefield, transform.position, handleDirections, currentHandleActiveKey);
     }
 }
 
@@ -106,30 +137,44 @@ class PlayerPositionCheck
 {
     private readonly Minefield _minefield;
     private readonly Vector3 _playerPosition;
+    
+    private  readonly Dictionary<KeyCode, Vector2Int> _handleDirections;
+    private readonly KeyCode _currentHandleActiveKey;
+    private readonly int _handleXCoord = 0;
+    private readonly int _handleYCoord = 0;
 
-    public PlayerPositionCheck(Minefield minefield, Vector3 playerPosition)
+    public PlayerPositionCheck(Minefield minefield, Vector3 playerPosition, 
+        Dictionary<KeyCode, Vector2Int> handleDirections, KeyCode currentHandleActiveKey)
     {
         _minefield = minefield;
         _playerPosition = playerPosition;
+        
+        _handleDirections = handleDirections;
+        _currentHandleActiveKey = currentHandleActiveKey;
+        if (_currentHandleActiveKey != KeyCode.None)
+        {
+            _handleXCoord = handleDirections[_currentHandleActiveKey].x;
+            _handleYCoord = handleDirections[_currentHandleActiveKey].y;
+        }
     }
 
     public bool IsLeft()
     {
-        return _minefield.MinefieldBordersCoords[0].x < _playerPosition.x;
+        return _minefield.MinefieldBordersCoords[0].x < _playerPosition.x + _handleXCoord;
     }
 
     public bool IsRight()
     {
-        return _minefield.MinefieldBordersCoords[1].x > _playerPosition.x;
+        return _minefield.MinefieldBordersCoords[1].x > _playerPosition.x + _handleXCoord;
     }
 
     public bool IsUp()
     {
-        return  _minefield.MinefieldBordersCoords[1].y > _playerPosition.y;
+        return  _minefield.MinefieldBordersCoords[1].y > _playerPosition.y + _handleYCoord;
     }
     
     public bool IsDown()
     {
-        return _minefield.MinefieldBordersCoords[0].y < _playerPosition.y;
+        return _minefield.MinefieldBordersCoords[0].y < _playerPosition.y + _handleYCoord;
     }
 }

@@ -116,7 +116,7 @@ public class Minefield : MonoBehaviour
         Cell cell = positionToCell[playerCoords];
         CellStatusResult statusResult = cell.CellStatus();
 
-        if (statusResult == CellStatusResult.Opened) return;
+        if (statusResult == CellStatusResult.Opened || cell.IsFlagged) return;
 
         if (cell.IsBomb)
         {

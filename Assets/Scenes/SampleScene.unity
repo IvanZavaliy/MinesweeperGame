@@ -343,11 +343,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98f495f20a209084284a86a9f53f27f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Minefield
-  width: 15
-  height: 10
+  width: 30
+  height: 15
   visualizer: {fileID: 2115043853}
   playerInput: {fileID: 855879320}
-  bombPercentage: 15
+  bombPercentage: 20
   winMenuPopUp: {fileID: 488405476}
   loseMenuPopUp: {fileID: 1731628971}
 --- !u!1 &488405476
