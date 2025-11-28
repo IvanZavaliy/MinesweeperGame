@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using DefaultNamespace;
 using NUnit.Framework;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class Minefield : MonoBehaviour
@@ -17,6 +19,9 @@ public class Minefield : MonoBehaviour
 
     [SerializeField] private GameObject winMenuPopUp;
     [SerializeField] private GameObject loseMenuPopUp;
+    
+    [SerializeField] private TimerController timerController;
+    
     private List<Cell> cells = new List<Cell>();
     private Dictionary<Vector2Int, Cell> positionToCell = new Dictionary<Vector2Int, Cell>();
     private List<Vector2Int> minefieldBordersCoords = new List<Vector2Int>();
@@ -50,7 +55,7 @@ public class Minefield : MonoBehaviour
         minefieldBordersCoords.Add(new Vector2Int(cells[^1].XCoord, cells[^1].YCoord));
     }
 
-    public void StartGame()
+    private void StartGame()
     {
         CreateMinefield();
         visualizer.VisualizeCellsOnStart(cells);
@@ -132,6 +137,7 @@ public class Minefield : MonoBehaviour
         {
             isGameStarted = true;
             SetBombs(cell);
+            timerController.StartTimer();
         }
         
         CellStatusResult statusResult = cell.CellStatus();
@@ -198,6 +204,7 @@ public class Minefield : MonoBehaviour
         visualizer.SetFlagsOnWin(cells);
         playerInput.isActive = false;
         winMenuPopUp.SetActive(true);
+        timerController.StopTimer();
     }
 
     private void LoseLogic()
@@ -206,6 +213,7 @@ public class Minefield : MonoBehaviour
         visualizer.BombVisualize(cells);
         playerInput.isActive = false;
         loseMenuPopUp.SetActive(true);
+        timerController.StopTimer();
     }
 
     public void GetCoordsForPlayer(Vector2Int coords)
