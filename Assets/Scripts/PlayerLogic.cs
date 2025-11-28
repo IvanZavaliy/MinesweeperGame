@@ -18,18 +18,16 @@ public class PlayerLogic : MonoBehaviour
         { KeyCode.DownArrow, new Vector2Int(0, -1) },
         { KeyCode.UpArrow, new Vector2Int(0, 1) }
     };
-    private Dictionary<KeyCode, Func<KeyCode, bool>> handleInMinefieldCheck;
-    
-    public Dictionary<KeyCode, Func<KeyCode, bool>> HandleInMinefieldCheck => handleInMinefieldCheck;
+    private Dictionary<KeyCode, Func<bool>> handleInMinefieldCheck;
 
     private void Awake()
     {
-        handleInMinefieldCheck = new Dictionary<KeyCode, Func<KeyCode, bool>>
+        handleInMinefieldCheck = new Dictionary<KeyCode, Func<bool>>
         {
-            { KeyCode.RightArrow, keyCode => IsPlayerInMinefield(keyCode).IsRight() },
-            { KeyCode.LeftArrow, keyCode => IsPlayerInMinefield(keyCode).IsLeft() },
-            { KeyCode.DownArrow, keyCode => IsPlayerInMinefield(keyCode).IsDown() },
-            { KeyCode.UpArrow, keyCode => IsPlayerInMinefield(keyCode).IsDown() }
+            { KeyCode.RightArrow, () => IsPlayerInMinefield().IsRight() },
+            { KeyCode.LeftArrow, () => IsPlayerInMinefield().IsLeft() },
+            { KeyCode.DownArrow, () => IsPlayerInMinefield().IsDown() },
+            { KeyCode.UpArrow, () => IsPlayerInMinefield().IsUp() }
         };
     }
 
@@ -127,9 +125,14 @@ public class PlayerLogic : MonoBehaviour
         return coords;
     }
     
-    private PlayerPositionCheck IsPlayerInMinefield(KeyCode currentHandleActiveKey = KeyCode.None)
+    private PlayerPositionCheck IsPlayerInMinefield()
     {
-        return new PlayerPositionCheck(minefield, transform.position, handleDirections, currentHandleActiveKey);
+        return new PlayerPositionCheck(minefield, transform.position);
+    }
+
+    public bool IsHandleInMinefield(KeyCode currentHandleActiveKey)
+    {
+        return handleInMinefieldCheck[currentHandleActiveKey].Invoke();
     }
 }
 
@@ -137,44 +140,30 @@ class PlayerPositionCheck
 {
     private readonly Minefield _minefield;
     private readonly Vector3 _playerPosition;
-    
-    private  readonly Dictionary<KeyCode, Vector2Int> _handleDirections;
-    private readonly KeyCode _currentHandleActiveKey;
-    private readonly int _handleXCoord = 0;
-    private readonly int _handleYCoord = 0;
 
-    public PlayerPositionCheck(Minefield minefield, Vector3 playerPosition, 
-        Dictionary<KeyCode, Vector2Int> handleDirections, KeyCode currentHandleActiveKey)
+    public PlayerPositionCheck(Minefield minefield, Vector3 playerPosition)
     {
         _minefield = minefield;
         _playerPosition = playerPosition;
-        
-        _handleDirections = handleDirections;
-        _currentHandleActiveKey = currentHandleActiveKey;
-        if (_currentHandleActiveKey != KeyCode.None)
-        {
-            _handleXCoord = handleDirections[_currentHandleActiveKey].x;
-            _handleYCoord = handleDirections[_currentHandleActiveKey].y;
-        }
     }
 
     public bool IsLeft()
     {
-        return _minefield.MinefieldBordersCoords[0].x < _playerPosition.x + _handleXCoord;
+        return _minefield.MinefieldBordersCoords[0].x < _playerPosition.x;
     }
 
     public bool IsRight()
     {
-        return _minefield.MinefieldBordersCoords[1].x > _playerPosition.x + _handleXCoord;
+        return _minefield.MinefieldBordersCoords[1].x > _playerPosition.x;
     }
 
     public bool IsUp()
     {
-        return  _minefield.MinefieldBordersCoords[1].y > _playerPosition.y + _handleYCoord;
+        return  _minefield.MinefieldBordersCoords[1].y > _playerPosition.y;
     }
     
     public bool IsDown()
     {
-        return _minefield.MinefieldBordersCoords[0].y < _playerPosition.y + _handleYCoord;
+        return _minefield.MinefieldBordersCoords[0].y < _playerPosition.y;
     }
 }

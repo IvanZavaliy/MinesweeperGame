@@ -343,8 +343,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98f495f20a209084284a86a9f53f27f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Minefield
-  width: 30
-  height: 15
+  width: 20
+  height: 10
   visualizer: {fileID: 2115043853}
   playerInput: {fileID: 855879320}
   bombPercentage: 20
@@ -953,6 +953,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInput
   minefield: {fileID: 254173066}
   playerVisualizer: {fileID: 546920806}
+  playerLogic: {fileID: 546920802}
   isActive: 1
 --- !u!1 &1052690533
 GameObject:

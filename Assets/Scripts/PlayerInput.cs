@@ -88,15 +88,13 @@ public class PlayerInput : MonoBehaviour
         }
         else
         {
-            if (Input.GetKeyDown(KeyCode.E) && 
-                playerLogic.HandleInMinefieldCheck[currentHandleActiveKey].Invoke(currentHandleActiveKey))
+            if (Input.GetKeyDown(KeyCode.E) && playerLogic.IsHandleInMinefield(currentHandleActiveKey))
             {
                 print("dig");
                 SetInactiveHandle();
                 OnDigUpCell?.Invoke(currentHandleActiveKey);
             }
-            if (Input.GetKeyDown(KeyCode.F) &&
-                playerLogic.HandleInMinefieldCheck[currentHandleActiveKey].Invoke(currentHandleActiveKey))
+            if (Input.GetKeyDown(KeyCode.F) && playerLogic.IsHandleInMinefield(currentHandleActiveKey))
             {
                 print("flag setted");
                 SetInactiveHandle();
