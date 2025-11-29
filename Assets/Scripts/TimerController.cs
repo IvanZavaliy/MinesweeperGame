@@ -27,6 +27,5 @@ public class TimerController : MonoBehaviour
     public void ResetTimer()
     {
         timer.Reset();
-        view.UpdateTimeToDisplay(0);
     }
 }

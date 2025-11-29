@@ -16,10 +16,8 @@ public class Minefield : MonoBehaviour
 
     [UnityEngine.Range(15, 50)]
     [SerializeField] private int bombPercentage;
-
-    [SerializeField] private GameObject winMenuPopUp;
-    [SerializeField] private GameObject loseMenuPopUp;
     
+    [SerializeField] private CanvasView canvasView;
     [SerializeField] private TimerController timerController;
     
     private List<Cell> cells = new List<Cell>();
@@ -203,7 +201,7 @@ public class Minefield : MonoBehaviour
         print("You win"); // Заглушка
         visualizer.SetFlagsOnWin(cells);
         playerInput.isActive = false;
-        winMenuPopUp.SetActive(true);
+        canvasView.ShowWinMenu();
         timerController.StopTimer();
     }
 
@@ -212,7 +210,7 @@ public class Minefield : MonoBehaviour
         print("You lose"); // Заглушка
         visualizer.BombVisualize(cells);
         playerInput.isActive = false;
-        loseMenuPopUp.SetActive(true);
+        canvasView.ShowLoseMenu();
         timerController.StopTimer();
     }
 
