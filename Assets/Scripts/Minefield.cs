@@ -213,7 +213,7 @@ public class Minefield : MonoBehaviour
 
     private void WinLogic()
     {
-        print("You win"); // Заглушка
+        print("You win");
         visualizer.SetFlagsOnWin(cells);
         SettedFlags = BombsToSetup;
         playerInput.isActive = false;
@@ -223,7 +223,7 @@ public class Minefield : MonoBehaviour
 
     private void LoseLogic()
     {
-        print("You lose"); // Заглушка
+        print("You lose");
         visualizer.BombVisualize(cells);
         playerInput.isActive = false;
         canvasView.ShowLoseMenu();
