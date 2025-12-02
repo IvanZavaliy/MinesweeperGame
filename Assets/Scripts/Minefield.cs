@@ -14,7 +14,7 @@ public class Minefield : MonoBehaviour
     [SerializeField] MinefieldVisualizer visualizer;
     [SerializeField] PlayerInput playerInput;
 
-    [UnityEngine.Range(15, 50)]
+    [UnityEngine.Range(10, 50)]
     [SerializeField] private int bombPercentage;
     
     [SerializeField] private CanvasView canvasView;
@@ -30,11 +30,26 @@ public class Minefield : MonoBehaviour
     private int remainedBomds; // Кількість закритих замінованих клітинок
 
     private int settedFlags = 0; // Кількість встановлених прапорців
+    public Action<int> UpdateSettedFlags;
+    
     private int closedCells; // Кількість закритих клітинок
     
     public int Width => width;
     public int Height => height;
     public bool GameStarted => isGameStarted;
+    public int BombsToSetup => bombsToSetup;
+
+    private int SettedFlags
+    {
+        get => settedFlags;
+        set
+        {
+            if (settedFlags == value) return;
+            
+            settedFlags = value;
+            UpdateSettedFlags?.Invoke(settedFlags);
+        }
+    }
     public List<Vector2Int> MinefieldBordersCoords => minefieldBordersCoords;
 
     private void Awake()
@@ -98,7 +113,7 @@ public class Minefield : MonoBehaviour
 
         if (result == SetBombFlagResult.Setted)
         {
-            settedFlags++;
+            SettedFlags++;
             visualizer.SetBombFlag(cell, result);
             
             if (cell.IsBomb) remainedBomds--;
@@ -106,7 +121,7 @@ public class Minefield : MonoBehaviour
 
         if (result == SetBombFlagResult.Unsetted)
         {
-            settedFlags--;
+            SettedFlags--;
             visualizer.SetBombFlag(cell, result);
             
             if (cell.IsBomb)
@@ -200,6 +215,7 @@ public class Minefield : MonoBehaviour
     {
         print("You win"); // Заглушка
         visualizer.SetFlagsOnWin(cells);
+        SettedFlags = BombsToSetup;
         playerInput.isActive = false;
         canvasView.ShowWinMenu();
         timerController.StopTimer();
