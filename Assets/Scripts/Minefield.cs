@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using DefaultNamespace;
 using NUnit.Framework;
 using TMPro;
+using UI;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -17,7 +19,7 @@ public class Minefield : MonoBehaviour
     [UnityEngine.Range(10, 50)]
     [SerializeField] private int bombPercentage;
     
-    [SerializeField] private CanvasView canvasView;
+    [SerializeField] private GameCanvasView gameCanvasView;
     [SerializeField] private TimerController timerController;
     
     private List<Cell> cells = new List<Cell>();
@@ -217,7 +219,7 @@ public class Minefield : MonoBehaviour
         visualizer.SetFlagsOnWin(cells);
         SettedFlags = BombsToSetup;
         playerInput.isActive = false;
-        canvasView.ShowWinMenu();
+        gameCanvasView.ShowWinMenu();
         timerController.StopTimer();
     }
 
@@ -226,7 +228,7 @@ public class Minefield : MonoBehaviour
         print("You lose");
         visualizer.BombVisualize(cells);
         playerInput.isActive = false;
-        canvasView.ShowLoseMenu();
+        gameCanvasView.ShowLoseMenu();
         timerController.StopTimer();
     }
 

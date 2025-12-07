@@ -37,7 +37,7 @@ public class DatabaseManager : MonoBehaviour
     public async Task<bool> IsNicknameTaken(string nickname)
     {
         string sqlQuery = "SELECT COUNT(*) " +
-                          $"FROM {TableName} " +
+                          $"FROM players " +
                           "WHERE nickname = @name";
 
         try
