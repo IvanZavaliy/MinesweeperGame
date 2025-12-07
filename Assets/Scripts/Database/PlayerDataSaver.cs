@@ -27,6 +27,10 @@ public class PlayerDataSaver : MonoBehaviour
         {
             view.UpdateNicknameText(nickname);
         }
+        else
+        {
+            view.UpdateNicknameText("");
+        }
     }
 
     public async void SaveNicknameToJson()
@@ -56,8 +60,7 @@ public class PlayerDataSaver : MonoBehaviour
             try
             {
                 await File.WriteAllTextAsync(path, json);
-                view.UpdateNicknameText(nicknameToSave);
-                nicknameInput.text = string.Empty;
+                CanvasUpdate(nicknameToSave);
                 Debug.Log("Nickname Saved!");
             }
             catch (System.Exception e)
@@ -65,6 +68,13 @@ public class PlayerDataSaver : MonoBehaviour
                 Debug.Log($"Error saving player data: {e.Message}");
             }
         }
+    }
+
+    private void CanvasUpdate(string nickname)
+    {
+        view.UpdateNicknameText(nickname);
+        nicknameInput.text = string.Empty;
+        view.ShowInformationText("Nickname Saved!", Color.forestGreen);
     }
 
     public async Task<string> GetNicknameFromJson()

@@ -27,8 +27,8 @@ public class DatabaseManager : MonoBehaviour
             }
         }
     }
-    
-    string connectionString = 
+
+    private readonly string _connectionString = 
         "Host=localhost;" +
         "Username=postgres;" +
         "Password=2955;" +
@@ -42,7 +42,7 @@ public class DatabaseManager : MonoBehaviour
 
         try
         {
-            using (var connection = new NpgsqlConnection(connectionString))
+            using (var connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
 
