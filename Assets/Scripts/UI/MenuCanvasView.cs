@@ -7,6 +7,8 @@ namespace UI
     public class MenuCanvasView : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI nicknameText;
+
+        [SerializeField] private GameObjectLeaderboards[] leaderboards;
         
         [SerializeField] private TextMeshProUGUI informationText;
         private Coroutine _activeCoroutine;
@@ -14,6 +16,14 @@ namespace UI
         public void UpdateNicknameText(string nickname)
         {
             nicknameText.text = nickname;
+        }
+
+        public void ShowLeaderboard(int index)
+        {
+            foreach (var leaderboard in leaderboards)
+            {
+                leaderboard.instance.SetActive(leaderboard.index == index);
+            }
         }
 
         public void ShowInformationText(string content, Color textColor, float fadeDuration = 2.0f)
@@ -29,7 +39,6 @@ namespace UI
         private IEnumerator ShowAndFadeRoutine(string content, Color targetColor, float duration)
         {
             informationText.text = content;
-            
             targetColor.a = 1f;
             informationText.color = targetColor;
             informationText.gameObject.SetActive(true);
@@ -52,4 +61,11 @@ namespace UI
             informationText.gameObject.SetActive(false);
         }
     }
+}
+
+[System.Serializable]
+public class GameObjectLeaderboards
+{
+    public int index;
+    public GameObject instance;
 }
