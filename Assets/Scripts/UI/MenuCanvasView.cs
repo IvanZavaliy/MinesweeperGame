@@ -6,24 +6,25 @@ namespace UI
 {
     public class MenuCanvasView : MonoBehaviour
     {
+        [Header("Input nickname elements")]
         [SerializeField] private TextMeshProUGUI nicknameText;
-
-        [SerializeField] private GameObjectLeaderboards[] leaderboards;
-        
         [SerializeField] private TextMeshProUGUI informationText;
+        
+        [Header("UI Containers (Vertical Layout Groups)")]
+        [SerializeField] private Transform rankColumnContainer;
+        [SerializeField] private Transform nicknameColumnContainer;
+        [SerializeField] private Transform timeColumnContainer;
+        [SerializeField] private Transform attemptsColumnContainer;
+        
+        [Header("Rows prefabs")]
+        public GameObject numberTextPrefab;  
+        public GameObject nicknameTextPrefab;
+        
         private Coroutine _activeCoroutine;
         
         public void UpdateNicknameText(string nickname)
         {
             nicknameText.text = nickname;
-        }
-
-        public void ShowLeaderboard(int index)
-        {
-            foreach (var leaderboard in leaderboards)
-            {
-                leaderboard.instance.SetActive(leaderboard.index == index);
-            }
         }
 
         public void ShowInformationText(string content, Color textColor, float fadeDuration = 2.0f)
@@ -60,12 +61,37 @@ namespace UI
             informationText.color = new Color(targetColor.r, targetColor.g, targetColor.b, 0f);
             informationText.gameObject.SetActive(false);
         }
+        
+        public void CreateRow(int rank, string nickname, int time, int attempts)
+        {
+            CreateTextObject(rankColumnContainer, numberTextPrefab, rank + ".");
+            CreateTextObject(nicknameColumnContainer, nicknameTextPrefab, nickname);
+            CreateTextObject(timeColumnContainer, numberTextPrefab, time + "s");
+            CreateTextObject(attemptsColumnContainer, numberTextPrefab, attempts.ToString());
+        }
+        
+        private void CreateTextObject(Transform container, GameObject prefab, string content)
+        {
+            GameObject newObject = Instantiate(prefab, container);
+            TextMeshProUGUI text = newObject.GetComponent<TextMeshProUGUI>();
+        
+            text.text = content;
+        }
+        
+        public void ClearLeaderboard()
+        {
+            ClearContainer(rankColumnContainer);
+            ClearContainer(nicknameColumnContainer);
+            ClearContainer(timeColumnContainer);
+            ClearContainer(attemptsColumnContainer);
+        }
+        
+        private void ClearContainer(Transform container)
+        {
+            foreach (Transform child in container)
+            {
+                Destroy(child.gameObject);
+            }
+        }
     }
-}
-
-[System.Serializable]
-public class GameObjectLeaderboards
-{
-    public int index;
-    public GameObject instance;
 }

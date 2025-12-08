@@ -2,27 +2,13 @@ using System;
 using System.Threading.Tasks;
 using Npgsql;
 using TMPro;
+using UI;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 public class DatabaseManager : MonoBehaviour
 {
-    [Header("UI Containers (Vertical Layout Groups) FOR TESTING")]
-    [SerializeField] private Transform rankContainer;
-    [SerializeField] private Transform nicknameContainer;
-    [SerializeField] private Transform timeContainer;
-    [SerializeField] private Transform attemptsContainer;
-    
-    [Header("Prefabs FOR TESTING")]
-    public GameObject numberTextPrefab;  
-    public GameObject nicknameTextPrefab;
-    
-    public enum Difficulty
-    {
-        Easy,
-        Medium,
-        Hard
-    }
+    [SerializeField] private MenuCanvasView view;
 
     public Difficulty difficulty;
 
@@ -38,12 +24,7 @@ public class DatabaseManager : MonoBehaviour
         "Host=localhost;" +
         "Username=postgres;" +
         "Password=2955;" +
-        "Database=postgres;";
-
-    private void Start()
-    {
-        UpdateLeaderboard(Difficulty.Easy);
-    }
+        "Database=leaderboards;";
 
     public async Task<bool> IsNicknameTaken(string nickname)
     {
@@ -82,7 +63,7 @@ public class DatabaseManager : MonoBehaviour
 
     public async void UpdateLeaderboard(Difficulty difficulty)
     {
-        ClearLeaderboard();
+        view.ClearLeaderboard();
         
         string tableName = GetTableName(difficulty);
         string sql = "SELECT *" +
@@ -107,8 +88,8 @@ public class DatabaseManager : MonoBehaviour
                             string nickname = reader.GetString(0);
                             int time = reader.GetInt32(1);
                             int attempts = reader.GetInt32(2);
-
-                            CreateRow(currentRank, nickname, time, attempts);
+                                
+                            view.CreateRow(currentRank, nickname, time, attempts);
 
                             currentRank++;
                         }
@@ -122,38 +103,6 @@ public class DatabaseManager : MonoBehaviour
         }
     }
     
-    private void CreateRow(int rank, string nickname, int time, int attempts)
-    {
-        CreateTextObject(rankContainer, numberTextPrefab, rank + ".");
-        CreateTextObject(nicknameContainer, nicknameTextPrefab, nickname);
-        CreateTextObject(timeContainer, numberTextPrefab, time + "s");
-        CreateTextObject(attemptsContainer, numberTextPrefab, attempts.ToString());
-    }
-
-    private void CreateTextObject(Transform container, GameObject prefab, string content)
-    {
-        GameObject newObject = Instantiate(prefab, container);
-        TextMeshProUGUI text = newObject.GetComponent<TextMeshProUGUI>();
-        
-        text.text = content;
-    }
-
-    private void ClearLeaderboard()
-    {
-        ClearContainer(rankContainer);
-        ClearContainer(nicknameContainer);
-        ClearContainer(timeContainer);
-        ClearContainer(attemptsContainer);
-    }
-
-    private void ClearContainer(Transform container)
-    {
-        foreach (Transform child in container)
-        {
-            Destroy(child.gameObject);
-        }
-    }
-    
     private string GetTableName(Difficulty diff)
     {
         switch (diff)
@@ -161,7 +110,16 @@ public class DatabaseManager : MonoBehaviour
             case Difficulty.Easy: return "minefield_easy_leaderboard";
             case Difficulty.Medium: return "minefield_medium_leaderboard";
             case Difficulty.Hard: return "minefield_hard_leaderboard";
+            case Difficulty.None: return string.Empty;
             default: return "minefield_easy_leaderboard";
         }
     }
+}
+
+public enum Difficulty
+{
+    Easy,
+    Medium,
+    Hard,
+    None
 }

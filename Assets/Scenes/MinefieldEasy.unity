@@ -348,7 +348,7 @@ MonoBehaviour:
   visualizer: {fileID: 2115043853}
   playerInput: {fileID: 855879320}
   bombPercentage: 11
-  canvasView: {fileID: 2010552653}
+  gameCanvasView: {fileID: 2010552653}
   timerController: {fileID: 1441790965}
 --- !u!1001 &267477107
 PrefabInstance:
