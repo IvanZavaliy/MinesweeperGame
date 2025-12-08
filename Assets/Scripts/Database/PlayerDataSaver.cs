@@ -13,8 +13,7 @@ public class PlayerDataSaver : MonoBehaviour
     [SerializeField] private MenuCanvasView view;
 
     private const string SaveFileName = "playerData.json";
-
-    [System.Serializable]
+    
     private class PlayerData
     {
         public string nickname;
