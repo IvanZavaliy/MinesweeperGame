@@ -52,11 +52,11 @@ public class DatabaseUpdate : MonoBehaviour
                 }
             }
             
-            Debug.Log("Результат успішно відправлено в БД!");
+            Debug.Log("The result was successfully sent to the DB!");
         }
         catch (Exception e)
         {
-            Debug.LogError($"Помилка відправки в БД: {e.Message}");
+            Debug.LogError($"Error sending to DB: {e.Message}");
         }
     }
 
@@ -90,7 +90,7 @@ public class DatabaseUpdate : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError($"Помилка збереження виграшу: {e.Message}");
+            Debug.LogError($"Error saving winnings: {e.Message}");
         }
     }
 }

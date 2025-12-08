@@ -1801,7 +1801,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DatabaseManager
   view: {fileID: 1899849933}
-  difficulty: 3
 --- !u!4 &380213629
 Transform:
   m_ObjectHideFlags: 0
@@ -5388,7 +5387,6 @@ MonoBehaviour:
   nicknameInput: {fileID: 76846725}
   dbManager: {fileID: 380213628}
   view: {fileID: 1899849933}
-  nicknameTextLabel: {fileID: 2054282663}
 --- !u!4 &1381238811
 Transform:
   m_ObjectHideFlags: 0
@@ -6548,6 +6546,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UI.MenuCanvasView
   nicknameText: {fileID: 2054282663}
   informationText: {fileID: 256643899}
+  nicknameTextLabel: {fileID: 2054282663}
   rankColumnContainer: {fileID: 1514270340}
   nicknameColumnContainer: {fileID: 1977253689}
   timeColumnContainer: {fileID: 925269942}

@@ -9,6 +9,7 @@ namespace UI
         [Header("Input nickname elements")]
         [SerializeField] private TextMeshProUGUI nicknameText;
         [SerializeField] private TextMeshProUGUI informationText;
+        [SerializeField] public TextMeshProUGUI nicknameTextLabel;
         
         [Header("UI Containers (Vertical Layout Groups)")]
         [SerializeField] private Transform rankColumnContainer;

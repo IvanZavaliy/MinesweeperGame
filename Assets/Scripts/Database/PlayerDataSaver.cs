@@ -11,8 +11,6 @@ public class PlayerDataSaver : MonoBehaviour
     [SerializeField] private DatabaseManager dbManager;
 
     [SerializeField] private MenuCanvasView view;
-    
-    [SerializeField] private TextMeshProUGUI nicknameTextLabel;
 
     private const string SaveFileName = "playerData.json";
     
@@ -80,7 +78,7 @@ public class PlayerDataSaver : MonoBehaviour
 
     public bool NicknameAvailabilityCheck()
     {
-        if (nicknameTextLabel.text == string.Empty || nicknameInput.text == "Name")
+        if (view.nicknameTextLabel.text == string.Empty || nicknameInput.text == "Name")
         {
             view.ShowInformationText("Nickname not entered!", Color.red);
             return false;
