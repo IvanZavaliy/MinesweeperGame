@@ -10,16 +10,6 @@ public class DatabaseManager : MonoBehaviour
 {
     [SerializeField] private MenuCanvasView view;
 
-    public Difficulty difficulty;
-
-    private string TableNameForPutRequest
-    {
-        get
-        {
-            return GetTableName(difficulty);
-        }
-    }
-
     private readonly string _connectionString = 
         "Host=localhost;" +
         "Username=postgres;" +
@@ -103,7 +93,7 @@ public class DatabaseManager : MonoBehaviour
         }
     }
     
-    private string GetTableName(Difficulty diff)
+    public static string GetTableName(Difficulty diff)
     {
         switch (diff)
         {

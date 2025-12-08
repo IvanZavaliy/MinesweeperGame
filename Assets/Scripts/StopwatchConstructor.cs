@@ -8,6 +8,8 @@ public class StopwatchConstructor
 
     public Action<int> OnTick;
 
+    public int ElapsedTime => (int)Math.Floor(_elapsedTime);
+
     public void Start()
     {
         if (_isRunning) return;

@@ -810,6 +810,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b89fd7307820e7e4c8df3f8ec86b9d0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneLoader
+  playerDataSaver: {fileID: 1381238810}
 --- !u!1 &135726642
 GameObject:
   m_ObjectHideFlags: 0
@@ -5387,6 +5388,7 @@ MonoBehaviour:
   nicknameInput: {fileID: 76846725}
   dbManager: {fileID: 380213628}
   view: {fileID: 1899849933}
+  nicknameTextLabel: {fileID: 2054282663}
 --- !u!4 &1381238811
 Transform:
   m_ObjectHideFlags: 0

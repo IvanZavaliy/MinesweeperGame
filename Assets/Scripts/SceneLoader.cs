@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
+    [SerializeField] private PlayerDataSaver playerDataSaver;
+    
     public void RestartMinefield()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -10,7 +12,10 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadLevelByIndex(int index)
     {
-        SceneManager.LoadScene(index);
+        if (playerDataSaver.NicknameAvailabilityCheck())
+        {
+            SceneManager.LoadScene(index);
+        }
     }
 
     public void LoadMainMenu()

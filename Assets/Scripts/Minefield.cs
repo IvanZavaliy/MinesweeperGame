@@ -22,6 +22,8 @@ public class Minefield : MonoBehaviour
     [SerializeField] private GameCanvasView gameCanvasView;
     [SerializeField] private TimerController timerController;
     
+    [SerializeField] private DatabaseUpdate dbUpdate;
+    
     private List<Cell> cells = new List<Cell>();
     private Dictionary<Vector2Int, Cell> positionToCell = new Dictionary<Vector2Int, Cell>();
     private List<Vector2Int> minefieldBordersCoords = new List<Vector2Int>();
@@ -221,6 +223,8 @@ public class Minefield : MonoBehaviour
         playerInput.isActive = false;
         gameCanvasView.ShowWinMenu();
         timerController.StopTimer();
+        Debug.Log(timerController.GetElapsedTime);
+        dbUpdate.SaveWinPlayerResult(timerController.GetElapsedTime);
     }
 
     private void LoseLogic()
@@ -230,6 +234,7 @@ public class Minefield : MonoBehaviour
         playerInput.isActive = false;
         gameCanvasView.ShowLoseMenu();
         timerController.StopTimer();
+        dbUpdate.UpdatePlayerAttempts();
     }
 
     public void GetCoordsForPlayer(Vector2Int coords)

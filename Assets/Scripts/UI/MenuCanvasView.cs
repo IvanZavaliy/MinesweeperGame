@@ -66,7 +66,8 @@ namespace UI
         {
             CreateTextObject(rankColumnContainer, numberTextPrefab, rank + ".");
             CreateTextObject(nicknameColumnContainer, nicknameTextPrefab, nickname);
-            CreateTextObject(timeColumnContainer, numberTextPrefab, time + "s");
+            CreateTextObject(timeColumnContainer, numberTextPrefab,
+                time == int.MaxValue ? "-" : time + "s");
             CreateTextObject(attemptsColumnContainer, numberTextPrefab, attempts.ToString());
         }
         

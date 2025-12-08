@@ -8,6 +8,8 @@ namespace UI
     
         private StopwatchConstructor timer = new StopwatchConstructor();
 
+        public int seconds = 0;
+
         private void Awake()
         {
             timer.OnTick += seconds =>
@@ -19,10 +21,12 @@ namespace UI
         void Update()
         {
             timer.Tick(Time.deltaTime);
+            seconds = timer.ElapsedTime;
         }
     
         public void StartTimer() => timer.Start();
         public void StopTimer() => timer.Stop();
+        public int GetElapsedTime => timer.ElapsedTime;
 
         public void ResetTimer()
         {
