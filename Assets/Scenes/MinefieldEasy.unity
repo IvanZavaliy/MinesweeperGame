@@ -808,7 +808,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 30b77660fc3d6b44fb599e8c0e2ad9da, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -851,6 +851,7 @@ MonoBehaviour:
   leftPlayerHandle: {fileID: 26654292}
   upPlayerHandle: {fileID: 1489587263}
   downPlayerHandle: {fileID: 235539614}
+  playerSprite: {fileID: 546920804}
 --- !u!1 &691205381
 GameObject:
   m_ObjectHideFlags: 0
@@ -2239,6 +2240,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimerSystem
   view: {fileID: 2010552653}
+  seconds: 0
 --- !u!4 &1441790966
 Transform:
   m_ObjectHideFlags: 0

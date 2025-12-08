@@ -18,7 +18,7 @@ public class DatabaseManager : MonoBehaviour
 
     public async Task<bool> IsNicknameTaken(string nickname)
     {
-        string sqlQuery = "SELECT (nickname, time, attempts_count) " +
+        string sqlQuery = "SELECT (nickname) " +
                           "FROM players " +
                           "WHERE nickname = @name";
 

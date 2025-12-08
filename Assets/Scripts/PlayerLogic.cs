@@ -7,6 +7,8 @@ public class PlayerLogic : MonoBehaviour
 {
     [SerializeField] Minefield minefield;
     
+    private PlayerVisualizer visualizer;
+    
     [SerializeField] private float stepDistance = 1f;
     [SerializeField] private float moveDuration = 0.1f;
     private bool isMoving = false;
@@ -29,6 +31,8 @@ public class PlayerLogic : MonoBehaviour
             { KeyCode.DownArrow, () => IsPlayerInMinefield().IsDown() },
             { KeyCode.UpArrow, () => IsPlayerInMinefield().IsUp() }
         };
+        
+        visualizer = GetComponent<PlayerVisualizer>();
     }
 
     private void OnEnable()
@@ -64,12 +68,18 @@ public class PlayerLogic : MonoBehaviour
     private void PlayerMoveRight()
     {
         if (!isMoving && IsPlayerInMinefield().IsRight())
+        {
             StartCoroutine(MoveStep(Vector3.right * stepDistance));
+            visualizer.FlipXPlayerSprite(false);
+        }    
     }
     private void PlayerMoveLeft()
     {
         if (!isMoving && IsPlayerInMinefield().IsLeft())
+        {
             StartCoroutine(MoveStep(Vector3.left * stepDistance));
+            visualizer.FlipXPlayerSprite(true);
+        }    
     }
 
     IEnumerator MoveStep(Vector3 moveVector)

@@ -9,6 +9,8 @@ public class PlayerVisualizer : MonoBehaviour
     [SerializeField] private GameObject upPlayerHandle;
     [SerializeField] private GameObject downPlayerHandle;
     private Dictionary<KeyCode, GameObject> HandlesInstances;
+    
+    [SerializeField] private SpriteRenderer playerSprite;
 
     private void Awake()
     {
@@ -24,5 +26,10 @@ public class PlayerVisualizer : MonoBehaviour
     public void SetActivePlayerHandle(bool active, KeyCode handleDirection)
     {
         HandlesInstances[handleDirection].SetActive(active);
+    }
+    
+    public void FlipXPlayerSprite(bool active)
+    {
+        playerSprite.flipX = active;
     }
 }
